@@ -48,11 +48,11 @@ return {
         -- Amount of padding to add to the left of headings
         -- If a floating point value < 1 is provided it is treated as a percentage of the available window space
         -- Can also be a list of numbers in which case the 'level' is used to index into the list using a clamp
-        left_pad = { 0.3, 0.25, 0.2, 0.15, 0.1, 0.05 },
+        left_pad = { 0.45, 0.35, 0.20, 0.15, 0.1, 0.05 },
         -- Amount of padding to add to the right of headings when width is 'block'
         -- If a floating point value < 1 is provided it is treated as a percentage of the available window space
         -- Can also be a list of numbers in which case the 'level' is used to index into the list using a clamp
-        right_pad = { 0.3, 0.25, 0.2, 0.15, 0.1, 0.05 },
+        right_pad = { 0.45, 0.35, 0.20, 0.15, 0.1, 0.05 },
         -- Minimum width to use for headings when width is 'block'
         -- Can also be a list of integers in which case the 'level' is used to index into the list using a clamp
         min_width = 0,
@@ -63,10 +63,10 @@ return {
         -- Highlight the start of the border using the foreground highlight
         border_prefix = false,
         -- Used above heading for border
-        above = '┳',
-        -- ▀▄▓▒░⠫⣱🁢🀰╋╋╋◈▣⧓⧯⯅⯆⭐⯊⯋🁢▰▖▘▔▁╽╿┻┳
+        above = '▄',
+        -- ▀▄▓▒░⠫⣱🁢🀰╋╋╋◈▣⧓⧯⯅⯆⭐⯊⯋🁢▰▖▘▔▁╽╿┻┳☰▬■
         -- Used below heading for border
-        below = '┻',
+        below = '▀',
         -- The 'level' is used to index into the list using a clamp
         -- Highlight for the heading icon and extends through the entire line
         backgrounds = {

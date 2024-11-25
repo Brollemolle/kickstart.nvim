@@ -22,7 +22,8 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
+    'leoluz/nvim-dap-go', -- Guessing GO
+    'julianolf/nvim-dap-lldb', -- C and C++
   },
   keys = function(_, keys)
     local dap = require 'dap'
@@ -113,5 +114,31 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+    local cfg = {
+      configurations = {
+        -- C lang configurations
+        c = {
+          {
+            name = 'Launch debugger',
+            type = 'lldb',
+            request = 'launch',
+            cwd = '${workspaceFolder}',
+            program = function()
+              -- Build with debug symbols
+              local out = vim.fn.system { 'make', 'debug' }
+              -- Check for errors
+              if vim.v.shell_error ~= 0 then
+                vim.notify(out, vim.log.levels.ERROR)
+                return nil
+              end
+              -- Return path to the debuggable program
+              return 'path/to/executable'
+            end,
+          },
+        },
+      },
+    }
+
+    require('dap-lldb').setup(cfg)
   end,
 }
