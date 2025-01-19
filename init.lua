@@ -107,6 +107,9 @@ vim.opt.relativenumber = true
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
+-- Enable terminal gui colors for nvim-colorizer plugin
+vim.o.termguicolors = true
+
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
@@ -174,6 +177,10 @@ vim.keymap.set('n', '<leader>x', '<cmd> bdelete! <CR>', { desc = 'Delete buffer'
 
 vim.keymap.set('n', '<C-s>', '<cmd> w <CR>', { desc = 'Save' })
 vim.keymap.set('i', '<C-s>', '<cmd> w <CR>', { desc = 'Save' })
+
+-- Stay in visual mode
+vim.keymap.set('v', '>', '>gv', { desc = 'Add indentation' })
+vim.keymap.set('v', '<', '<gv', { desc = 'Remove indentation' })
 
 -- NOTE: Custom options
 vim.o.expandtab = true -- expand tab input with spaces characters
@@ -472,6 +479,7 @@ require('lazy').setup({
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'nvim-java/nvim-java',
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -635,6 +643,7 @@ require('lazy').setup({
       local servers = {
         clangd = {},
         sqlls = {},
+        jdtls = {},
         -- java_language_server = {},
         -- gopls = {},
         -- pyright = {},
@@ -690,6 +699,15 @@ require('lazy').setup({
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
+          jdtls = function()
+            require('java').setup {
+              -- Your custom jdtls settings goes here
+            }
+
+            require('lspconfig').jdtls.setup {
+              -- Your custom nvim-java configuration goes here
+            }
+          end,
         },
       }
     end,
@@ -715,7 +733,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = false, cpp = false }
+        local disable_filetypes = { c = false, cpp = false, java = false }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
           lsp_format_opt = 'never'
@@ -871,19 +889,14 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+    'xero/miasma.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd 'colorscheme miasma'
     end,
     opts = {
-      transparent = true,
+      transparent = false,
     },
   },
 
