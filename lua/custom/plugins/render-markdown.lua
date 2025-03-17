@@ -57,7 +57,7 @@ return {
         -- Can also be a list of integers in which case the 'level' is used to index into the list using a clamp
         min_width = 0,
         -- Determines if a border is added above and below headings
-        border = true,
+        border = false,
         -- Always use virtual lines for heading borders instead of attempting to use empty lines
         border_virtual = true,
         -- Highlight the start of the border using the foreground highlight
