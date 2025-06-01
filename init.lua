@@ -640,15 +640,75 @@ require('lazy').setup({
       --  bin = 'java-language-server', -- Path to the executable
       -- ... other configuration options ...
       --}
+
+      require('lspconfig').rust_analyzer.setup {
+        cmd = { 'rust-analyzer' }, -- Uses Nix's binary
+        settings = {
+          ['rust-analyzer'] = {
+            checkOnSave = { command = 'clippy' }, -- Optional: Enable clippy
+          },
+        },
+      }
+
+      require('lspconfig').clangd.setup {
+        cmd = { 'clangd' }, -- Uses Nix's binary
+      }
+
+      require('lspconfig').jdtls.setup {
+        cmd = { 'jdtls' }, -- Uses Nix's binary
+      }
+
+      require('lspconfig').tinymist.setup {
+        cmd = { 'tinymist' }, -- Uses Nix's binary
+      }
+
+      -- require('lspconfig').ltex_ls.setup {
+      --   cmd = { 'ltex-ls' },
+      --   -- on_attach = handlers.on_attach,
+      --   -- capabilities = capabilities,
+      --   settings = {
+      --     ltex = {
+      --       enabled = { 'typst' }, -- Specify Typst as the file type
+      --       language = 'en-US', -- Set the language for spell checking
+      --       diagnosticSeverity = 'info',
+      --       checkFrequency = 'save',
+      --       sentenceCacheSize = 2000,
+      --       additionalRules = {
+      --         enablePickyRules = false,
+      --       },
+      --       trace = { server = 'verbose' },
+      --       disabledRules = {
+      --         ['en-US'] = { 'MORFOLOGIK_RULE_EN_US' },
+      --       },
+      --     },
+      --   },
+      -- }
+
+      -- require('lspconfig').lua_language_server.setup {
+      --   cmd = { 'lua-language-server' },
+      --   -- settings = {
+      --   --   Lua = {
+      --   --     completion = {
+      --   --       callSnippet = 'Replace',
+      --   --     },
+      --   --     -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+      --   --     -- diagnostics = { disable = { 'missing-fields' } },
+      --   --   },
+      --   -- },
+      -- }
+
       local servers = {
-        clangd = {},
+        -- clangd = {},
         sqlls = {},
-        jdtls = {},
+        -- jdtls = {},
         -- java_language_server = {},
         -- gopls = {},
         pyright = {},
         rnix = {},
-        rust_analyzer = {},
+        -- ltex_ls = {},
+        -- rust_analyzer = {
+        --   cmd = { "rust-analyzer" },
+        -- },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -658,20 +718,20 @@ require('lazy').setup({
         -- ts_ls = {},
         --
 
-        lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = 'Replace',
-              },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
-            },
-          },
-        },
+        -- lua_ls = {
+        --   -- cmd = {...},
+        --   -- filetypes = { ...},
+        --   -- capabilities = {},
+        --   settings = {
+        --     Lua = {
+        --       completion = {
+        --         callSnippet = 'Replace',
+        --       },
+        --       -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+        --       -- diagnostics = { disable = { 'missing-fields' } },
+        --     },
+        --   },
+        -- },
       }
 
       -- Ensure the servers and tools above are installed
@@ -686,7 +746,7 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        -- 'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -764,6 +824,8 @@ require('lazy').setup({
         sql = { 'sql_formatter' },
         -- Conform can also run multiple formatters sequentially
         python = { 'isort', 'black' },
+        rust = { 'rustfmt' },
+        typst = { 'typstyle' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -893,11 +955,13 @@ require('lazy').setup({
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     -- 'xero/miasma.nvim',
-    'shaunsingh/nord.nvim',
-    lazy = false,
+    -- 'shaunsingh/nord.nvim',
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    -- lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd 'colorscheme nord'
+      vim.cmd 'colorscheme rose-pine'
     end,
     opts = {
       transparent = true,

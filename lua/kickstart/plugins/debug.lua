@@ -91,6 +91,39 @@ return {
       },
     }
 
+     -- ===== Rust Debugging (LLDB via codelldb) =====
+  -- Adapter configuration for codelldb
+  dap.adapters.codelldb = {
+    type = 'server',
+    port = '${port}',  -- Dynamic port
+    executable = {
+      command = 'codelldb',  -- Must be in PATH (or use full Nix store path)
+      args = { '--port', '${port}' },
+    },
+  }
+
+  -- Rust debug configurations
+  dap.configurations.rust = {
+    {
+      name = 'Launch Rust Program',
+      type = 'codelldb',
+      request = 'launch',
+      program = function()
+        -- Default path to debug binary (adjust if your Rust project uses a different target dir)
+        return vim.fn.input(
+          'Path to executable: ',
+          vim.fn.getcwd() .. '/target/debug/' .. vim.fn.fnamemodify(vim.fn.getcwd(), ':t'),
+          'file'
+        )
+      end,
+      cwd = '${workspaceFolder}',
+      stopOnEntry = false,
+      args = {},  -- Add CLI args here if needed
+      environment = {},  -- Add env vars here if needed
+      terminal = 'integrated',
+    },
+  }
+
     -- Change breakpoint icons
     vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
     vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
