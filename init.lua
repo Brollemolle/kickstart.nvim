@@ -670,6 +670,10 @@ require('lazy').setup({
         cmd = { 'elp' }, -- Uses Nix's binary
       }
 
+      require('lspconfig').erlangls.setup {
+        cmd = { 'erlang_ls' }, -- Uses Nix's binary
+      }
+
       require('lspconfig').ltex.setup {
         cmd = { 'ltex-ls' },
         settings = {
