@@ -662,27 +662,44 @@ require('lazy').setup({
         cmd = { 'tinymist' }, -- Uses Nix's binary
       }
 
-      -- require('lspconfig').ltex_ls.setup {
-      --   cmd = { 'ltex-ls' },
-      --   -- on_attach = handlers.on_attach,
-      --   -- capabilities = capabilities,
-      --   settings = {
-      --     ltex = {
-      --       enabled = { 'typst' }, -- Specify Typst as the file type
-      --       language = 'en-US', -- Set the language for spell checking
-      --       diagnosticSeverity = 'info',
-      --       checkFrequency = 'save',
-      --       sentenceCacheSize = 2000,
-      --       additionalRules = {
-      --         enablePickyRules = false,
-      --       },
-      --       trace = { server = 'verbose' },
-      --       disabledRules = {
-      --         ['en-US'] = { 'MORFOLOGIK_RULE_EN_US' },
-      --       },
-      --     },
-      --   },
-      -- }
+      require('lspconfig').nixd.setup {
+        cmd = { 'nixd' }, -- Uses Nix's binary
+      }
+
+      require('lspconfig').elp.setup {
+        cmd = { 'elp' }, -- Uses Nix's binary
+      }
+
+      require('lspconfig').ltex.setup {
+        cmd = { 'ltex-ls' },
+        settings = {
+          ltex = {
+            -- enabled = { 'typst' },
+            language = 'en-US',
+            additionalRules = {
+              languageModel = '~/models/ngrams/',
+            },
+          },
+        },
+        -- on_attach = handlers.on_attach,
+        -- capabilities = capabilities,
+        -- settings = {
+        --   ltex = {
+        --     enabled = { 'typst' }, -- Specify Typst as the file type
+        --     language = 'en-US', -- Set the language for spell checking
+        --     diagnosticSeverity = 'info',
+        --     checkFrequency = 'save',
+        --     sentenceCacheSize = 2000,
+        --     additionalRules = {
+        --       enablePickyRules = false,
+        --     },
+        --     trace = { server = 'verbose' },
+        --     disabledRules = {
+        --       ['en-US'] = { 'MORFOLOGIK_RULE_EN_US' },
+        --     },
+        --   },
+        -- },
+      }
 
       -- require('lspconfig').lua_language_server.setup {
       --   cmd = { 'lua-language-server' },
@@ -704,7 +721,7 @@ require('lazy').setup({
         -- java_language_server = {},
         -- gopls = {},
         pyright = {},
-        rnix = {},
+        -- rnix = {},
         -- ltex_ls = {},
         -- rust_analyzer = {
         --   cmd = { "rust-analyzer" },
