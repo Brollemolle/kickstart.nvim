@@ -674,6 +674,10 @@ require('lazy').setup({
         cmd = { 'erlang_ls' }, -- Uses Nix's binary
       }
 
+      require('lspconfig').ts_ls.setup {
+        cmd = { 'typescript-language-server' }, -- Uses Nix's binary
+      }
+
       require('lspconfig').ltex.setup {
         cmd = { 'ltex-ls' },
         settings = {
