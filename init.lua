@@ -675,7 +675,7 @@ require('lazy').setup({
       }
 
       require('lspconfig').ts_ls.setup {
-        cmd = { 'typescript-language-server' }, -- Uses Nix's binary
+        cmd = { 'typescript-language-server', '--stdio' }, -- Uses Nix's binary
       }
 
       require('lspconfig').ltex.setup {
