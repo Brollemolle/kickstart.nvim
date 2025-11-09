@@ -183,10 +183,10 @@ vim.keymap.set('v', '>', '>gv', { desc = 'Add indentation' })
 vim.keymap.set('v', '<', '<gv', { desc = 'Remove indentation' })
 
 -- NOTE: Custom options
-vim.o.expandtab = true -- expand tab input with spaces characters
+vim.o.expandtab = true   -- expand tab input with spaces characters
 vim.o.smartindent = true -- syntax aware indentations for newline inserts
-vim.o.tabstop = 4 -- num of space characters per tab
-vim.o.shiftwidth = 4 -- spaces per indentation level
+vim.o.tabstop = 4        -- num of space characters per tab
+vim.o.shiftwidth = 4     -- spaces per indentation level
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -291,7 +291,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -334,7 +334,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -374,7 +374,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -470,7 +470,7 @@ require('lazy').setup({
       },
     },
   },
-  { 'Bilal2453/luvit-meta', lazy = true },
+  { 'Bilal2453/luvit-meta',     lazy = true },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -483,7 +483,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -740,7 +740,7 @@ require('lazy').setup({
             ['rust-analyzer'] = {
               checkOnSave = { command = 'clippy' }, -- Optional: Enable clippy
             },
-        },
+          },
         },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -794,15 +794,15 @@ require('lazy').setup({
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
-          jdtls = function()
-            require('java').setup {
-              -- Your custom jdtls settings goes here
-            }
-
-            require('lspconfig').jdtls.setup {
-              -- Your custom nvim-java configuration goes here
-            }
-          end,
+          -- jdtls = function()
+          --   require('java').setup {
+          --     -- Your custom jdtls settings goes here
+          --   }
+          --
+          --   require('lspconfig').jdtls.setup {
+          --     -- Your custom nvim-java configuration goes here
+          --   }
+          -- end,
         },
       }
     end,
