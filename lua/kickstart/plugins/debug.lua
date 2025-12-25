@@ -22,8 +22,8 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'leoluz/nvim-dap-go', -- Guessing GO
-    'julianolf/nvim-dap-lldb', -- C and C++
+    'leoluz/nvim-dap-go', -- Go
+    'mfussenegger/nvim-dap-python', -- Python
   },
   keys = function(_, keys)
     local dap = require 'dap'
@@ -66,6 +66,7 @@ return {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
         'codelldb',
+        'debugpy',
       },
     }
 
@@ -91,38 +92,58 @@ return {
       },
     }
 
-     -- ===== Rust Debugging (LLDB via codelldb) =====
-  -- Adapter configuration for codelldb
-  dap.adapters.codelldb = {
-    type = 'server',
-    port = '${port}',  -- Dynamic port
-    executable = {
-      command = 'codelldb',  -- Must be in PATH (or use full Nix store path)
-      args = { '--port', '${port}' },
-    },
-  }
+    -- ===== Rust/C/C++ Debugging (LLDB via codelldb) =====
+    dap.adapters.codelldb = {
+      type = 'server',
+      port = '${port}',
+      executable = {
+        command = 'codelldb',
+        args = { '--port', '${port}' },
+      },
+    }
 
-  -- Rust debug configurations
-  dap.configurations.rust = {
-    {
-      name = 'Launch Rust Program',
-      type = 'codelldb',
-      request = 'launch',
-      program = function()
-        -- Default path to debug binary (adjust if your Rust project uses a different target dir)
-        return vim.fn.input(
-          'Path to executable: ',
-          vim.fn.getcwd() .. '/target/debug/' .. vim.fn.fnamemodify(vim.fn.getcwd(), ':t'),
-          'file'
-        )
-      end,
-      cwd = '${workspaceFolder}',
-      stopOnEntry = false,
-      args = {},  -- Add CLI args here if needed
-      environment = {},  -- Add env vars here if needed
-      terminal = 'integrated',
-    },
-  }
+    local function pick_executable()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end
+
+    dap.configurations.c = {
+      {
+        name = 'Launch',
+        type = 'codelldb',
+        request = 'launch',
+        program = pick_executable,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {},
+      },
+    }
+
+    dap.configurations.cpp = dap.configurations.c
+
+    dap.configurations.rust = {
+      {
+        name = 'Launch Rust Program',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input(
+            'Path to executable: ',
+            vim.fn.getcwd() .. '/target/debug/' .. vim.fn.fnamemodify(vim.fn.getcwd(), ':t'),
+            'file'
+          )
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {},
+        environment = {},
+        terminal = 'integrated',
+      },
+    }
+
+    -- Python (debugpy via mason)
+    local mason_path = vim.fn.stdpath('data') .. '/mason'
+    local debugpy_python = mason_path .. '/packages/debugpy/venv/bin/python'
+    require('dap-python').setup(debugpy_python)
 
     -- Change breakpoint icons
     vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
@@ -148,31 +169,5 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
-    local cfg = {
-      configurations = {
-        -- C lang configurations
-        c = {
-          {
-            name = 'Launch debugger',
-            type = 'lldb',
-            request = 'launch',
-            cwd = '${workspaceFolder}',
-            program = function()
-              -- Build with debug symbols
-              local out = vim.fn.system { 'make', 'debug' }
-              -- Check for errors
-              if vim.v.shell_error ~= 0 then
-                vim.notify(out, vim.log.levels.ERROR)
-                return nil
-              end
-              -- Return path to the debuggable program
-              return 'path/to/executable'
-            end,
-          },
-        },
-      },
-    }
-
-    require('dap-lldb').setup(cfg)
   end,
 }
