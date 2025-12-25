@@ -575,7 +575,8 @@ require('lazy').setup({
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight',
+              { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
               group = highlight_augroup,
@@ -734,6 +735,7 @@ require('lazy').setup({
         ts_ls = {},
         -- rnix = {},
         -- ltex_ls = {},
+        tinymist = {},
         rust_analyzer = {
           cmd = { "rust-analyzer" },
           settings = {
@@ -994,12 +996,13 @@ require('lazy').setup({
     name = 'gruvbox',
     -- lazy = false,
     priority = 1000,
-    config = function()
+    opts = {
+      transparent_mode = true,
+    },
+    config = function(_, opts)
+      require('gruvbox').setup(opts)
       vim.cmd 'colorscheme gruvbox'
     end,
-    opts = {
-      transparent = true,
-    },
   },
 
   -- Highlight todo, notes, etc in comments
@@ -1030,13 +1033,23 @@ require('lazy').setup({
       -- set use_icons to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
+      local function codex_status()
+        local ok, codex = pcall(require, 'codex')
+        if not ok then return '' end
+        return type(codex.statusline) == 'function' and
+            (codex.statusline() or '') or ''
+      end
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
-        return '%2l:%-2v'
+        local codex = codex_status()
+        return (codex ~= '' and (codex .. ' ') or '') .. '%2l:%-2v'
       end
+      -- statusline.section_location = function()
+      --   return '%2l:%-2v'
+      -- end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
