@@ -210,6 +210,17 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 -- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 -- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- [[ Configure inline LSP diagnostics ]]
+vim.diagnostic.config({
+  virtual_text = {
+    spacing = 2,
+    prefix = "●",
+  },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+})
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
