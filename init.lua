@@ -90,6 +90,9 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- Set JAVA_HOME to ensure Java 21+ is used (jdtls requires it)
+vim.env.JAVA_HOME = '/usr/lib/jvm/java-25-openjdk'
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -737,7 +740,13 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         sqlls = {},
-        jdtls = {},
+        jdtls = {
+          cmd = {
+            "jdtls",
+            "--java-executable",
+            "/usr/bin/java",
+          },
+        },
         -- java_language_server = {},
         gopls = {},
         pyright = {},
@@ -841,7 +850,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = false, cpp = false, java = true }
+        local disable_filetypes = { c = false, cpp = false, java = false }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
           lsp_format_opt = 'never'
@@ -871,6 +880,7 @@ require('lazy').setup({
         python = { 'isort', 'black' },
         rust = { 'rustfmt' },
         typst = { 'typstyle' },
+        java = { 'google-java-format' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
