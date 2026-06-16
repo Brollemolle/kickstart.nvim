@@ -29,7 +29,7 @@ return {
         -- The number of '#' in the heading determines the 'level'
         -- The 'level' is used to index into the list using a cycle
         -- icons = { 'Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ' },
-        icons = { '❶', '❷', '❸', '❹', '❺', '❻' },
+        icons = { '❶ ', '❷ ', '❸ ', '❹ ', '❺ ', '❻ ' },
         -- icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
         -- Added to the sign column if enabled
         -- The 'level' is used to index into the list using a cycle
